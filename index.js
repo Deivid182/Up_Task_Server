@@ -29,6 +29,9 @@ import { Server } from "socket.io"
 
 const io = new Server(server, {
   pingTimeout: 60000,
+  cors: {
+    origin: "*"   
+  }
 })
 
 io.on("connection", (socket) => {
