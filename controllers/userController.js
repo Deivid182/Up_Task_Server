@@ -23,7 +23,7 @@ export const newUser = async (req, res) => {
       token: user.token
     })
 
-    res.json({msg: "  Thanks for signing up. Check your email for a link to verify your email address"});
+    res.json({msg: "Thanks for signing up. Check your email for a link to verify your email address"});
   } catch (error) {
     console.log(error);
   }
@@ -87,7 +87,7 @@ export const forgotPassword = async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) {
     const error = new Error("Email address not founded");
-    res.status(404).json({ msg: error.message });
+    res.status(404).json({ message: error.message });
   }
 
   try {
