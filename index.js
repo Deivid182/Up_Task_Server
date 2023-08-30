@@ -5,15 +5,15 @@ import userRoutes from "./routes/userRoutes.js"
 import projectRoutes from "./routes/projectRoutes.js"
 import taskRoutes from "./routes/taskRoutes.js"
 import cors from "cors"
+dotenv.config()
+connectDB()
 
 
 const app = express()
-dotenv.config()
 app.use(express.json({ limit: "50mb" }))
 app.use(cors())
 
 
-connectDB()
 
 app.use("/api/users", userRoutes)
 app.use("/api/projects", projectRoutes)
