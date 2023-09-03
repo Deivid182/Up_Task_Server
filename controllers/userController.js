@@ -144,3 +144,53 @@ export const profile = async(req, res) =>{
   const { user } = req
   res.json(user)
 }
+
+export const updateProfile = async(req, res) =>{
+  const { id } = req.params;
+  const { username, email, newPassword, currentPassword } = req.body; 
+
+  const user = await User.findById(id)
+
+  if(!user) return res.status(404).json({ message: 'User not found'})
+
+  if(req.user.email !== email) {
+    const existsEmail = await User.findOne({ email })
+    if(existsEmail) return res.status(400).json({ message: 'Email already exists'}) 
+  }
+
+  if(currentPassword){
+    const isCorrectPassword = await user.comparePassword(currentPassword)
+    if(!isCorrectPassword) {
+      return res.status(400).json({ message: 'Invalid password'})
+    } else {
+      user.password = newPassword
+    }
+  }
+
+  try {
+    user.username = username || user.username;
+    user.email = email ||  user.email;
+  
+    await user.save()
+    res.status(200).json(user)
+  } catch (error) {
+    res.status(500).json({ message: "Something went wrong" })
+  }
+}
+
+export const updatePassword = async(req, res) =>{
+  const { currentPassword, newPassword } = req.body;
+
+  const { _id } = req.user
+  const user = await User.findById(_id)
+
+  if(!user) return res.status(404).json({ message: 'User not found'})
+
+  if(await user.comparePassword(currentPassword)) {
+      user.password = newPassword;
+      await user.save()
+      return res.status(200).json({ message: 'Password changed' })
+  } else {
+    return res.status(400).json({ message: 'Invalid password' })
+  }
+}
