@@ -147,7 +147,7 @@ export const profile = async(req, res) =>{
 
 export const updateProfile = async(req, res) =>{
   const { id } = req.params;
-  const { username, email, newPassword, currentPassword } = req.body; 
+  const { name, email, newPassword, currentPassword } = req.body; 
 
   const user = await User.findById(id)
 
@@ -168,7 +168,7 @@ export const updateProfile = async(req, res) =>{
   }
 
   try {
-    user.username = username || user.username;
+    user.name = name || user.name;
     user.email = email ||  user.email;
   
     await user.save()
